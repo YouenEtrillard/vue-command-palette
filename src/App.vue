@@ -1,16 +1,20 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import CommandPalette from './components/CommandPalette.vue';
+import { useMagicKeys } from '@vueuse/core';
 
 const displayCommandPalette = ref(false);
+const keys = useMagicKeys();
+
+watch(keys.ctrl_shift_l, (isPressed) => {
+  if (isPressed) {
+    displayCommandPalette.value = !displayCommandPalette.value;
+  }
+});
 </script>
 
 <template>
-  <img
-    alt="Vue logo"
-    src="./assets/logo.png"
-    @click="displayCommandPalette = !displayCommandPalette"
-  />
+  <img alt="Vue logo" src="./assets/logo.png" />
   <CommandPalette v-if="displayCommandPalette" />
 </template>
 
