@@ -1,23 +1,19 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue';
+import commands from '../features/commands';
 
 const commandFilterText = ref('');
-const commandList = ref([
-  { id: 123, title: 'command arigato 1', alias: [], hotkeys: [] },
-  { id: 456, title: 'command nikouli 2', alias: [], hotkeys: [] },
-  { id: 789, title: 'command makouli 3', alias: [], hotkeys: [] },
-]);
+const commandList = ref(commands.commandList);
 
 const filteredCommandList = computed(() => {
   const filterText = commandFilterText.value.toLowerCase();
 
-  return commandList.value.filter((command) => {
+  return commandList.value.filter((command: { title: string }) => {
     return command.title.toLowerCase().includes(filterText);
   });
 });
 
 const commandInput = ref();
-
 onMounted(() => {
   commandInput.value.focus();
 });
@@ -28,7 +24,11 @@ onMounted(() => {
     <h1>My command palette</h1>
     <input ref="commandInput" type="text" v-model="commandFilterText" />
     <ul>
-      <li v-for="command in filteredCommandList" :key="command.id">
+      <li
+        v-for="command in filteredCommandList"
+        :key="command.id"
+        @click="command.command"
+      >
         {{ command.title }}
       </li>
     </ul>

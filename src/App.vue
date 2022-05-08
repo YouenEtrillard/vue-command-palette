@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import CommandPalette from './components/CommandPalette.vue';
+import Counter from './components/Counter.vue';
 import { useMagicKeys, whenever } from '@vueuse/core';
 
-const displayCommandPalette = ref(false);
+const displayCommandPalette = ref(true);
 const keys = useMagicKeys();
 
 whenever(keys.ctrl_shift_l, () => {
@@ -14,6 +15,7 @@ whenever(keys.ctrl_shift_l, () => {
 <template>
   <img alt="Vue logo" src="./assets/logo.png" />
   <CommandPalette v-if="displayCommandPalette" />
+  <Counter />
 </template>
 
 <style>
