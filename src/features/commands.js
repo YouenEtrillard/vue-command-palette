@@ -1,6 +1,7 @@
+import { ref } from 'vue';
 import counter from './counter';
 
-const commandList = [
+export const commandList = ref([
   {
     id: 123,
     title: 'Increment count',
@@ -22,6 +23,4 @@ const commandList = [
     hotkeys: [],
     command: undefined,
   },
-];
-
-export default { commandList };
+]);

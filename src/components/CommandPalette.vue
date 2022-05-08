@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue';
-import commands from '../features/commands';
+import { commandList } from '../features/commands';
 
 const commandFilterText = ref('');
-const commandList = ref(commands.commandList);
 
 const filteredCommandList = computed(() => {
   const filterText = commandFilterText.value.toLowerCase();
