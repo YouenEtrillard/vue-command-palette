@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 
 const commandFilterText = ref('');
 const commandList = ref([
@@ -15,12 +15,18 @@ const filteredCommandList = computed(() => {
     return command.title.toLowerCase().includes(filterText);
   });
 });
+
+const commandInput = ref();
+
+onMounted(() => {
+  commandInput.value.focus();
+});
 </script>
 
 <template>
   <div class="command-palette">
     <h1>My command palette</h1>
-    <input type="text" v-model="commandFilterText" />
+    <input ref="commandInput" type="text" v-model="commandFilterText" />
     <ul>
       <li v-for="command in filteredCommandList" :key="command.id">
         {{ command.title }}
