@@ -5,7 +5,7 @@ import { commandList } from '../features/commands';
 
 const keys = useMagicKeys();
 const commandFilterText = ref('');
-const highlightedItemIndex = ref(0);
+const highlightedCommandIndex = ref(0);
 
 const filteredCommandList = computed(() => {
   const filterText = commandFilterText.value.toLowerCase();
@@ -13,6 +13,10 @@ const filteredCommandList = computed(() => {
   return commandList.value.filter((command: { title: string }) => {
     return command.title.toLowerCase().includes(filterText);
   });
+});
+
+const highlightedCommand = computed(() => {
+  return filteredCommandList.value[highlightedCommandIndex.value];
 });
 
 const commandInput = ref();
@@ -24,17 +28,25 @@ onMounted(() => {
 
 whenever(keys.down, () => {
   if (displayed) {
-    highlightedItemIndex.value < filteredCommandList.value.length - 1
-      ? highlightedItemIndex.value++
-      : (highlightedItemIndex.value = 0);
+    highlightedCommandIndex.value < filteredCommandList.value.length - 1
+      ? highlightedCommandIndex.value++
+      : (highlightedCommandIndex.value = 0);
   }
 });
 
 whenever(keys.up, () => {
   if (displayed) {
-    highlightedItemIndex.value > 0
-      ? highlightedItemIndex.value--
-      : (highlightedItemIndex.value = filteredCommandList.value.length - 1);
+    highlightedCommandIndex.value > 0
+      ? highlightedCommandIndex.value--
+      : (highlightedCommandIndex.value = filteredCommandList.value.length - 1);
+  }
+});
+
+whenever(keys.enter, () => {
+  if (highlightedCommand.value.command) {
+    highlightedCommand.value.command();
+  } else {
+    console.log('No command associated');
   }
 });
 </script>
@@ -48,7 +60,7 @@ whenever(keys.up, () => {
         v-for="(command, index) in filteredCommandList"
         :key="command.id"
         @click="command.command"
-        :class="index === highlightedItemIndex ? 'is-highlighted' : ''"
+        :class="index === highlightedCommandIndex ? 'is-highlighted' : ''"
       >
         {{ command.title }}
       </li>
