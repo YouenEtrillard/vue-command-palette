@@ -1,8 +1,14 @@
 <script setup lang="ts">
 import { useMagicKeys, whenever } from '@vueuse/core';
-import { computed, ref, onMounted } from 'vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { commandList } from '../features/commands';
 
+const props = defineProps({
+  displayed: {
+    type: Boolean,
+    default: true,
+  },
+});
 const keys = useMagicKeys();
 const commandFilterText = ref('');
 const highlightedCommandIndex = ref(0);
@@ -19,15 +25,19 @@ const highlightedCommand = computed(() => {
   return filteredCommandList.value[highlightedCommandIndex.value];
 });
 
-const commandInput = ref();
-const displayed = ref(false);
+const elFilterInput = ref();
 onMounted(() => {
-  displayed.value = true;
-  commandInput.value.focus();
+  elFilterInput.value.focus();
+});
+watch(props, async (cv) => {
+  if (props.displayed) {
+    await nextTick();
+    elFilterInput.value.focus();
+  }
 });
 
 whenever(keys.down, () => {
-  if (displayed) {
+  if (props.displayed) {
     highlightedCommandIndex.value < filteredCommandList.value.length - 1
       ? highlightedCommandIndex.value++
       : (highlightedCommandIndex.value = 0);
@@ -35,7 +45,7 @@ whenever(keys.down, () => {
 });
 
 whenever(keys.up, () => {
-  if (displayed) {
+  if (props.displayed) {
     highlightedCommandIndex.value > 0
       ? highlightedCommandIndex.value--
       : (highlightedCommandIndex.value = filteredCommandList.value.length - 1);
@@ -54,7 +64,7 @@ whenever(keys.enter, () => {
 <template>
   <div class="command-palette">
     <h1>My command palette</h1>
-    <input ref="commandInput" type="text" v-model="commandFilterText" />
+    <input ref="elFilterInput" type="text" v-model="commandFilterText" />
     <ul>
       <li
         v-for="(command, index) in filteredCommandList"
@@ -62,7 +72,8 @@ whenever(keys.enter, () => {
         @click="command.command"
         :class="index === highlightedCommandIndex ? 'is-highlighted' : ''"
       >
-        {{ command.title }}
+        <span>{{ command.title }}</span>
+        <span v-if="command.hotkeys">{{ command.hotkeys }}</span>
       </li>
     </ul>
   </div>
@@ -72,27 +83,19 @@ whenever(keys.enter, () => {
 ul {
   padding: 0;
   width: 100%;
-  max-width: 250px;
+  max-width: 300px;
   margin: 0 auto;
 }
 
 li {
   list-style-type: none;
+  padding: 10px;
   text-align: left;
-  padding-left: 15px;
   position: relative;
+  display: flex;
+  justify-content: space-between;
 }
 .is-highlighted {
-  color: #048b9a;
-}
-
-.is-highlighted::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  border: 5px solid transparent;
-  border-left-color: currentColor;
+  background: hsl(186, 95%, 31%, 30%);
 }
 </style>

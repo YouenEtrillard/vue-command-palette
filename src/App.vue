@@ -14,7 +14,10 @@ whenever(keys.ctrl_shift_l, () => {
 
 <template>
   <img alt="Vue logo" src="./assets/logo.png" />
-  <CommandPalette v-if="displayCommandPalette" />
+  <CommandPalette
+    v-show="displayCommandPalette"
+    :displayed="displayCommandPalette"
+  />
   <Counter />
 </template>
 
