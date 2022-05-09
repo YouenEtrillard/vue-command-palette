@@ -3,12 +3,25 @@ import { ref, watch } from 'vue';
 import CommandPalette from './components/CommandPalette.vue';
 import Counter from './components/Counter.vue';
 import { useMagicKeys, whenever } from '@vueuse/core';
+import { commandList } from './features/commands';
 
 const displayCommandPalette = ref(true);
 const keys = useMagicKeys();
 
 whenever(keys.ctrl_shift_l, () => {
   displayCommandPalette.value = !displayCommandPalette.value;
+});
+
+commandList.value.forEach((item) => {
+  if (item.hotkeys.length > 0) {
+    item.hotkeys.forEach((hotkey) => {
+      if (item.command) {
+        whenever(keys[hotkey], () => {
+          item.command();
+        });
+      }
+    });
+  }
 });
 </script>
 
