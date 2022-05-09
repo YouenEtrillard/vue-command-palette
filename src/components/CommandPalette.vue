@@ -10,6 +10,8 @@ const props = defineProps({
   },
 });
 const keys = useMagicKeys();
+
+// Filter list with user input
 const commandFilterText = ref('');
 const highlightedCommandIndex = ref(0);
 
@@ -20,11 +22,9 @@ const filteredCommandList = computed(() => {
     return command.title.toLowerCase().includes(filterText);
   });
 });
+// End Filter list with user input
 
-const highlightedCommand = computed(() => {
-  return filteredCommandList.value[highlightedCommandIndex.value];
-});
-
+// Focus input automatically
 const elFilterInput = ref();
 onMounted(() => {
   elFilterInput.value.focus();
@@ -34,6 +34,12 @@ watch(props, async (cv) => {
     await nextTick();
     elFilterInput.value.focus();
   }
+});
+// End Focus input automatically
+
+// Highlight and select command
+const highlightedCommand = computed(() => {
+  return filteredCommandList.value[highlightedCommandIndex.value];
 });
 
 whenever(keys.down, () => {
@@ -59,6 +65,7 @@ whenever(keys.enter, () => {
     console.log('No command associated');
   }
 });
+// End Highlight and select command
 </script>
 
 <template>
