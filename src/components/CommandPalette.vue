@@ -87,6 +87,7 @@ whenever(keys.enter, () => {
         ref="elFilterInput"
         type="text"
         v-model="commandFilterText"
+        placeholder="Select a command"
       />
       <ul class="command-palette-list">
         <li
