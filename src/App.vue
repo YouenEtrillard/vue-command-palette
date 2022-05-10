@@ -1,29 +1,38 @@
 <script setup lang="ts">
+import 'normalize.css';
 import { ref, watch } from 'vue';
 import CommandPalette from './components/CommandPalette.vue';
 import Counter from './components/Counter.vue';
 import { useMagicKeys, whenever } from '@vueuse/core';
-import { commandList } from './features/commands';
-import 'normalize.css';
+import { useCommandStore } from './stores/CommandStore';
+import Todo from './components/Todo.vue';
 
-const displayCommandPalette = ref(true);
+const displayCommandPalette = ref(false);
 const keys = useMagicKeys();
 
 whenever(keys.ctrl_shift_l, () => {
   displayCommandPalette.value = !displayCommandPalette.value;
 });
 
-commandList.value.forEach((item) => {
-  if (item.hotkeys.length > 0) {
-    item.hotkeys.forEach((hotkey) => {
-      if (item.command) {
-        whenever(keys[hotkey], () => {
-          item.command();
-        });
-      }
-    });
+const commandStore = useCommandStore();
+commandStore.commandList.forEach(
+  (item: {
+    id: number;
+    title: string;
+    command: Function;
+    hotkeys: Array<any>;
+  }) => {
+    if (item.hotkeys.length > 0) {
+      item.hotkeys.forEach((hotkey) => {
+        if (item.command) {
+          whenever(keys[hotkey], () => {
+            item.command();
+          });
+        }
+      });
+    }
   }
-});
+);
 </script>
 
 <template>
@@ -33,6 +42,7 @@ commandList.value.forEach((item) => {
     :displayed="displayCommandPalette"
   />
   <Counter />
+  <Todo />
 </template>
 
 <style>

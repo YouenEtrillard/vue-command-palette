@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useMagicKeys, whenever } from '@vueuse/core';
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
-import { commandList } from '../features/commands';
+import { useCommandStore } from '../stores/CommandStore';
 
 const props = defineProps({
   displayed: {
@@ -13,6 +13,7 @@ const props = defineProps({
     default: 'light',
   },
 });
+const commandStore = useCommandStore();
 const keys = useMagicKeys();
 
 // Filter list with user input
@@ -22,7 +23,7 @@ const highlightedCommandIndex = ref(0);
 const filteredCommandList = computed(() => {
   const filterText = commandFilterText.value.toLowerCase();
 
-  return commandList.value.filter((command: { title: string }) => {
+  return commandStore.commandList.filter((command: { title: string }) => {
     return command.title.toLowerCase().includes(filterText);
   });
 });
