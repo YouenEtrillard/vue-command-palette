@@ -14,7 +14,7 @@ export const useCommandStore = defineStore('CommandStore', {
           id: uuidv4(),
           title: command.title,
           origin: 'Primary command',
-          function: command.command,
+          command: command.command,
         });
 
         if (command.aliasList.length > 0) {
@@ -23,7 +23,7 @@ export const useCommandStore = defineStore('CommandStore', {
               id: uuidv4(),
               title: alias,
               origin: command.title,
-              function: command.command,
+              command: command.command,
             });
           });
         }
