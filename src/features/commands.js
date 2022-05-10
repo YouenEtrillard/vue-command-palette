@@ -9,5 +9,6 @@ export const register = (config) => {
     title: config.name,
     command: config.function,
     hotkeys: config.hotkeys || [],
+    aliasList: config.aliasList || [],
   });
 };

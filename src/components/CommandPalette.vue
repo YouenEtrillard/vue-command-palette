@@ -23,7 +23,7 @@ const highlightedCommandIndex = ref(0);
 const filteredCommandList = computed(() => {
   const filterText = commandFilterText.value.toLowerCase();
 
-  return commandStore.commandList.filter((command: { title: string }) => {
+  return commandStore.composedList.filter((command: { title: string }) => {
     return command.title.toLowerCase().includes(filterText);
   });
 });
@@ -98,7 +98,11 @@ whenever(keys.enter, () => {
           class="command-palette-item"
           :class="index === highlightedCommandIndex ? 'is-highlighted' : ''"
         >
-          <span>{{ command.title }}</span>
+          <span
+            >{{ command.title
+            }}<span class="command-origin">{{ command.origin }}</span></span
+          >
+
           <span v-if="command.hotkeys">{{ command.hotkeys }}</span>
         </li>
       </ul>
@@ -164,5 +168,10 @@ whenever(keys.enter, () => {
 }
 .is-highlighted {
   background: hsl(186, 95%, 31%, 0.5);
+}
+
+.command-origin {
+  display: block;
+  font-size: 0.8rem;
 }
 </style>
