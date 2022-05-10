@@ -8,6 +8,10 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  theme: {
+    type: String,
+    default: 'light',
+  },
 });
 const keys = useMagicKeys();
 
@@ -69,40 +73,93 @@ whenever(keys.enter, () => {
 </script>
 
 <template>
-  <div class="command-palette">
-    <h1>My command palette</h1>
-    <input ref="elFilterInput" type="text" v-model="commandFilterText" />
-    <ul>
-      <li
-        v-for="(command, index) in filteredCommandList"
-        :key="command.id"
-        @click="command.command"
-        :class="index === highlightedCommandIndex ? 'is-highlighted' : ''"
-      >
-        <span>{{ command.title }}</span>
-        <span v-if="command.hotkeys">{{ command.hotkeys }}</span>
-      </li>
-    </ul>
+  <div
+    class="command-palette-overlay"
+    :class="
+      theme === 'dark'
+        ? 'command-palette-overlay--dark'
+        : 'command-palette-overlay--light'
+    "
+  >
+    <section class="command-palette">
+      <input
+        class="command-palette-filter"
+        ref="elFilterInput"
+        type="text"
+        v-model="commandFilterText"
+      />
+      <ul class="command-palette-list">
+        <li
+          v-for="(command, index) in filteredCommandList"
+          :key="command.id"
+          @click="command.command"
+          class="command-palette-item"
+          :class="index === highlightedCommandIndex ? 'is-highlighted' : ''"
+        >
+          <span>{{ command.title }}</span>
+          <span v-if="command.hotkeys">{{ command.hotkeys }}</span>
+        </li>
+      </ul>
+    </section>
   </div>
 </template>
 
-<style scoped>
-ul {
-  padding: 0;
+<style>
+.command-palette-overlay {
+  --backgroundColor: 0, 0%, 90%;
+  background: hsl(var(--backgroundColor), 0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  max-width: 300px;
-  margin: 0 auto;
+  height: 100vh;
 }
 
-li {
+.command-palette {
+  background: hsl(var(--backgroundColor), 0.9);
+  color: hsl(0, 0%, 0%);
+  width: 90%;
+  max-width: 600px;
+  margin: 20px auto 0;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+}
+
+.command-palette-overlay--dark {
+  --backgroundColor: 0, 0%, 0%;
+}
+
+.command-palette-overlay--dark .command-palette {
+  color: hsl(0, 0%, 80%);
+}
+
+.command-palette-overlay--dark .command-palette-filter {
+  border-color: hsl(0, 0%, 50%, 0.9);
+  color: inherit;
+}
+
+.command-palette-filter {
+  background: inherit;
+  border: 1px solid hsl(0, 0%, 0%, 0.4);
+  margin: 5px;
+  padding: 8px 6px;
+}
+
+.command-palette-list {
+  padding: 0;
+  margin: 0;
+}
+
+.command-palette-item {
   list-style-type: none;
-  padding: 10px;
+  padding: 8px 12px;
   text-align: left;
   position: relative;
   display: flex;
   justify-content: space-between;
 }
 .is-highlighted {
-  background: hsl(186, 95%, 31%, 30%);
+  background: hsl(186, 95%, 31%, 0.5);
 }
 </style>

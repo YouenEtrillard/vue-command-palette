@@ -4,6 +4,7 @@ import CommandPalette from './components/CommandPalette.vue';
 import Counter from './components/Counter.vue';
 import { useMagicKeys, whenever } from '@vueuse/core';
 import { commandList } from './features/commands';
+import 'normalize.css';
 
 const displayCommandPalette = ref(true);
 const keys = useMagicKeys();
@@ -42,5 +43,11 @@ commandList.value.forEach((item) => {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
 }
 </style>
