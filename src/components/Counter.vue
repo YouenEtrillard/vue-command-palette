@@ -1,11 +1,22 @@
 <script setup>
-import counter from '../features/counter.js';
+import { ref } from 'vue';
+import { register as registerCommand } from '../features/commands';
+
+const currentCount = ref(0);
+
+const incrementCount = () => currentCount.value++;
+
+registerCommand({
+  name: 'Increment count',
+  function: incrementCount,
+  hotkeys: ['Ctrl_Alt_I'],
+});
 </script>
 
 <template>
   <h2>Counter</h2>
-  <p>{{ counter.currentCount }}</p>
-  <button @click="counter.incrementCount">+</button>
+  <p>{{ currentCount }}</p>
+  <button @click="incrementCount">+</button>
 </template>
 
 <style scoped></style>

@@ -1,14 +1,16 @@
 import { ref } from 'vue';
-import counter from './counter';
+
+export const register = (config) => {
+  console.log(config);
+  commandList.value.push({
+    id: 356,
+    title: config.name,
+    command: config.function,
+    hotkeys: config.hotkeys || [],
+  });
+};
 
 export const commandList = ref([
-  {
-    id: 123,
-    title: 'Increment count',
-    alias: [],
-    hotkeys: ['Ctrl_Alt_I'],
-    command: counter.incrementCount,
-  },
   {
     id: 456,
     title: 'nikouli 2',
