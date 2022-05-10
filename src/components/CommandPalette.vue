@@ -124,6 +124,7 @@ whenever(keys.enter, () => {
   border-radius: 6px;
   display: flex;
   flex-direction: column;
+  padding: 8px;
 }
 
 .command-palette-overlay--dark {
@@ -142,8 +143,8 @@ whenever(keys.enter, () => {
 .command-palette-filter {
   background: inherit;
   border: 1px solid hsl(0, 0%, 0%, 0.4);
-  margin: 5px;
-  padding: 8px 6px;
+  margin-bottom: 8px;
+  padding: 8px 7px;
 }
 
 .command-palette-list {
@@ -153,7 +154,7 @@ whenever(keys.enter, () => {
 
 .command-palette-item {
   list-style-type: none;
-  padding: 8px 12px;
+  padding: 8px;
   text-align: left;
   position: relative;
   display: flex;
