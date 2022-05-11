@@ -5,6 +5,7 @@ import CommandPalette from './components/CommandPalette.vue';
 import { useMagicKeys, whenever } from '@vueuse/core';
 import { useCommandStore } from './stores/CommandStore';
 import Navbar from './components/Navbar.vue';
+import { Command } from './types/command.type';
 
 const displayCommandPalette = ref(false);
 const keys = useMagicKeys();
@@ -20,24 +21,17 @@ whenever(keys.escape, () => {
 });
 
 const commandStore = useCommandStore();
-commandStore.commandList.forEach(
-  (item: {
-    id: number;
-    title: string;
-    command: Function;
-    hotkeys: Array<any>;
-  }) => {
-    if (item.hotkeys.length > 0) {
-      item.hotkeys.forEach((hotkey) => {
-        if (item.command) {
-          whenever(keys[hotkey], () => {
-            item.command();
-          });
-        }
-      });
-    }
+commandStore.commandList.forEach((command: Command) => {
+  if (command.hotkeys && command.hotkeys.length > 0) {
+    command.hotkeys.forEach((hotkey) => {
+      if (command.action) {
+        whenever(keys[hotkey], () => {
+          command.action();
+        });
+      }
+    });
   }
-);
+});
 </script>
 
 <template>

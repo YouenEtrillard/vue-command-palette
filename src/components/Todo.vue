@@ -16,7 +16,7 @@ const addTask = () => {
 
 registerCommand({
   name: 'Add task to todo list',
-  function: addTask,
+  action: addTask,
 });
 </script>
 

@@ -1,29 +1,30 @@
 import { defineStore } from 'pinia';
 import { v4 as uuidv4 } from 'uuid';
+import { RegisteredCommand } from "../types/command.type";
 
 export const useCommandStore = defineStore('CommandStore', {
   state: () => ({
-    commandList: [],
+    commandList: [] as RegisteredCommand[],
   }),
   getters: {
     composedList: (state) => {
-      const composedCommandList = [];
+      const composedCommandList: RegisteredCommand[] = [];
 
-      state.commandList.forEach((command) => {
+      state.commandList.forEach((command: RegisteredCommand) => {
         composedCommandList.push({
           id: uuidv4(),
-          title: command.title,
+          name: command.name,
           origin: 'Primary command',
-          command: command.command,
+          action: command.action,
         });
 
-        if (command.aliasList.length > 0) {
+        if (command.aliasList && command.aliasList.length > 0) {
           command.aliasList.forEach((alias) => {
             composedCommandList.push({
               id: uuidv4(),
-              title: alias,
-              origin: command.title,
-              command: command.command,
+              name: alias,
+              origin: command.name,
+              action: command.action,
             });
           });
         }

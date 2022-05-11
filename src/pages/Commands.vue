@@ -1,21 +1,26 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useCommandStore } from '../stores/CommandStore';
+import { RegisteredCommand } from '../types/command.type';
+import type { Ref } from 'vue';
 
 const commandStore = useCommandStore();
 
-const userAliasInputList = ref({});
+const userAliasInputList: Ref<{ [k: string]: any }> = ref({});
 
-const addAlias = (command) => {
-  command.aliasList.push(userAliasInputList.value[command.id]);
+const addAlias = (command: RegisteredCommand) => {
+  command.aliasList
+    ? command.aliasList.push(userAliasInputList.value[command.id])
+    : (command.aliasList = [userAliasInputList.value[command.id]]);
 };
 </script>
 
 <template>
   <h1>Commands</h1>
+  <pre>{{ userAliasInputList }}</pre>
   <ul>
     <li v-for="(command, index) in commandStore.commandList" :key="command.id">
-      {{ command.title }}
+      {{ command.name }}
       <div>
         <input type="text" v-model="userAliasInputList[command.id]" />
         <button @click="addAlias(command)">Add alias</button>

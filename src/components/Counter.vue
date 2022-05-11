@@ -9,13 +9,13 @@ const decrementCount = () => currentCount.value--;
 
 registerCommand({
   name: 'Increment count',
-  function: incrementCount,
+  action: incrementCount,
   hotkeys: ['Ctrl_Alt_I'],
 });
 
 registerCommand({
   name: 'Decrement count',
-  function: decrementCount,
+  action: decrementCount,
   hotkeys: ['Ctrl_Alt_D'],
 });
 </script>

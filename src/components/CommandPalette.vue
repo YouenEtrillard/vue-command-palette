@@ -2,6 +2,7 @@
 import { useMagicKeys, whenever } from '@vueuse/core';
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { useCommandStore } from '../stores/CommandStore';
+import { Command } from '../types/command.type';
 
 const props = defineProps({
   displayed: {
@@ -23,21 +24,21 @@ const highlightedCommandIndex = ref(0);
 const filteredCommandList = computed(() => {
   const filterText = commandFilterText.value.toLowerCase();
 
-  return commandStore.composedList.filter((command: { title: string }) => {
-    return command.title.toLowerCase().includes(filterText);
+  return commandStore.composedList.filter((command: Command) => {
+    return command.name.toLowerCase().includes(filterText);
   });
 });
 // End Filter list with user input
 
 // Focus input automatically
-const elFilterInput = ref();
+const elFilterInput = ref<HTMLInputElement | null>(null);
 onMounted(() => {
-  elFilterInput.value.focus();
+  elFilterInput.value?.focus();
 });
 watch(props, async (cv) => {
   if (props.displayed) {
     await nextTick();
-    elFilterInput.value.focus();
+    elFilterInput.value?.focus();
   }
 });
 // End Focus input automatically
@@ -64,8 +65,8 @@ whenever(keys.up, () => {
 });
 
 whenever(keys.enter, () => {
-  if (highlightedCommand.value.command) {
-    highlightedCommand.value.command();
+  if (highlightedCommand.value.action) {
+    highlightedCommand.value.action();
   } else {
     console.log('No command associated');
   }
@@ -94,12 +95,12 @@ whenever(keys.enter, () => {
         <li
           v-for="(command, index) in filteredCommandList"
           :key="command.id"
-          @click="command.command"
+          @click="command.action()"
           class="command-palette-item"
           :class="index === highlightedCommandIndex ? 'is-highlighted' : ''"
         >
           <span
-            >{{ command.title
+            >{{ command.name
             }}<span class="command-origin">{{ command.origin }}</span></span
           >
 
